@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on KubeArmor</title>
+    <link>https://hugo.shubhamtatvamasi.com/tags/</link>
+    <description>Recent content in Tags on KubeArmor</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://hugo.shubhamtatvamasi.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ebpf</title>
+      <link>https://hugo.shubhamtatvamasi.com/tags/ebpf/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hugo.shubhamtatvamasi.com/tags/ebpf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubearmor</title>
+      <link>https://hugo.shubhamtatvamasi.com/tags/kubearmor/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hugo.shubhamtatvamasi.com/tags/kubearmor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kubernetes</title>
+      <link>https://hugo.shubhamtatvamasi.com/tags/kubernetes/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hugo.shubhamtatvamasi.com/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>security</title>
+      <link>https://hugo.shubhamtatvamasi.com/tags/security/</link>
+      <pubDate>Sat, 19 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hugo.shubhamtatvamasi.com/tags/security/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

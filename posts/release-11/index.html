@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>KubeArmor v0.11 Release | KubeArmor</title>
+<meta name="keywords" content="kubearmor, kubernetes, security, ebpf">
+<meta name="description" content="Elevating Container Security for Kubernetes Environments">
+<meta name="author" content="KubeArmor Maintainers">
+<link rel="canonical" href="https://hugo.shubhamtatvamasi.com/posts/release-11/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://hugo.shubhamtatvamasi.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://hugo.shubhamtatvamasi.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://hugo.shubhamtatvamasi.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://hugo.shubhamtatvamasi.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://hugo.shubhamtatvamasi.com/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="KubeArmor v0.11 Release" />
+<meta property="og:description" content="Elevating Container Security for Kubernetes Environments" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hugo.shubhamtatvamasi.com/posts/release-11/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-08-19T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="KubeArmor v0.11 Release"/>
+<meta name="twitter:description" content="Elevating Container Security for Kubernetes Environments"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Posts",
+      "item": "https://hugo.shubhamtatvamasi.com/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "KubeArmor v0.11 Release",
+      "item": "https://hugo.shubhamtatvamasi.com/posts/release-11/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "KubeArmor v0.11 Release",
+  "name": "KubeArmor v0.11 Release",
+  "description": "Elevating Container Security for Kubernetes Environments",
+  "keywords": [
+    "kubearmor", "kubernetes", "security", "ebpf"
+  ],
+  "articleBody": "We’re thrilled to introduce the latest release of KubeArmor, version v0.11! This significant update reinforces our commitment to providing top-tier container-level security for Kubernetes deployments. With an array of new features, integrations, and improvements, KubeArmor v0.11 empowers you to achieve even greater security and control over your containerized workloads. Let’s delve into the key highlights of this release:\nOperator support: Simplifying Management and Deployment KubeArmor v0.11 comes with robust operator support, making the installation, configuration, and management of KubeArmor instances a breeze. The KubeArmor Operator streamlines the deployment process, enabling you to efficiently set up and maintain KubeArmor across your Kubernetes clusters. Embrace simplicity and consistency in managing your security policies.\nElements of KubeArmor Operator design:\nOperator: Operator is the initial component that gets deployed as part of helm based installation. The job of the operator is to reconcile the current state of KubeArmor to its intended state. Snitch: Snitch is a job deployed by operator to check what is the prevalent LSM (Linux Security Modules) and the container runtime on each of the node. Snitch then directs the KubeArmor daemonset to use these parameters to accordingly use the appropriate enforcer and container runtime primitives. bpf-containerd: This is essentially the KubeArmor daemonset that does most of the work from observability to policy enforcement. Note that the name of the daemonset is dependent on the underlying enforcer (bpf, apparmor) that is used and the container runtime that is detected. Relay: KubeArmor Relay connects to each of the daemonset and collects the alerts/telemetry/log and makes it available at single GRPC endpoint. External services can connect to KubeArmor Relay to gets the alerts/telemetry from a single point. Relay is available as a k8s deployment/service. Controller: KubeArmor controller reconciles the KubeArmor policies. One of the biggest advantage of KubeArmor is its use of k8s-native design for policy management. Users can enable disable policies at will by applying/deleting the policies at runtime. This enables a wide range of possibilities such as time-based policy activation. OpenTelemetry The OpenTelemetry KubeArmor adapter converts KubeArmor telemetry data (logs, visibilty events, policy violations) to the openTelemetry format. This adds opentelemetry support to KubeArmor providing a vendor agnostic means of exporting KubeArmor’s telemetry data to various observability backend such as elastic search, grafana, signoz and a bunch of other opentelemetry adopters!\nTo enhance your observability capabilities, KubeArmor now seamlessly integrates with Open Telemetry. Gain unparalleled insights into container behavior and workload interactions through comprehensive telemetry data collection. With this integration, you’ll be equipped to make informed decisions, swiftly identify anomalies, and proactively address potential security threats.\nCredits: Amazing work by Maureen Ononiwu for handling KubeArmor’s OpenTelemetry integration as part of LFX Mentorship. :rocket:\nAnnouncing k8tls (pronounced cattles): k8s service endpoints TLS best practices assessment Security extends beyond containers. KubeArmor v0.11 introduces k8tls to bolster transport layer security within Kubernetes clusters. Safeguard your communications with enhanced encryption, safeguarding your data and ensuring the confidentiality of sensitive information.\nK8tls is a k8s-native service endpoint scanning engine that verifies whether the endpoint is using secure communication and is using right security configuration. K8tls deploys itself as a k8s job that scans/fingerprints k8s service endpoints to identify if TLS best practices are followed. Primary features include:\n🔒 Check if the server port is TLS enabled or not. 📃 Check TLS version, Ciphersuite, Hash, and Signature for the connection. Are these TLS parameters per the TLS best practices guide? Certificate Verification 💥 Is the certificate expired or revoked? ✍️ Is it a self-signed certificate? ⛓️ Is there a self-signed certificate in the full certificate chain? KubeArmor as Canonical Microk8s Addon Microk8s is a full embedded Kubernetes platform that is lightweight yet robust and scalable and is a perfect fit for edge, embedded scenarios. KubeArmor support for Canonical MicroK8s as a community addon is merged making microk8s more secure. Microk8s with KubeArmor brings enterprise grade security to lightweight edge kubernetes environments.\nKind and Minikube Compatibility With this release, KubeArmor extends its compatibility to Kind and Minikube clusters, enabling you to effortlessly apply KubeArmor’s security policies to your local testing and development environments. Maintain consistency between testing and production while fortifying your workloads.\nkarmor profile karmor logs tool provides raw telemetry out of the box. However, you may want to summarize the process, file, network, syscall events over a period of time. karmor profile introduces a way to handle the summarization. KubeArmor community followers might realize that the base profile feature was added in v0.8 release. v0.11 vastly improves the usability of the features, for e.g, by sorting the data based on process name, summarizing/aggregating well, adding syscall related event summarization etc.\nEKS Addon published: Simplifing EKS deployment Amazon EKS Anywhere allows installing and managing Kubernetes clusters on your own infrastructure, with optional support from AWS. EKS Anywhere supports full lifecycle management of multiple Kubernetes clusters that can operate completely independently of any AWS services. It provides open-source software that’s up to date and patched so you can have an on-premises Kubernetes environment that’s more reliable than a self-managed Kubernetes offering. EKS Anywhere is compatible with Bare Metal, CloudStack, and VMware vSphere as deployment targets.\nAlthough EKS Anywhere can make cluster administration easier, the issue of protecting how Kubernetes namespaces, pods, workloads, and clusters interaction and access of shared resources remains an unsolved problem. It is imperative that workloads are protected at runtime since most of the attacks such as cryptomining, ransomware, data exfiltration, denial of service are manifest once the workloads are deployed in target k8s environment.\nIn line with the recommended safety guidelines for EKS, KubeArmor comprehensively fulfills these requirements. Getting up to speed on the Kubernetes threat environment proves to be difficult for security teams. New responsibilities for Kubernetes infrastructure and workloads lead to high overhead. Furthermore, ensuring that platform and application teams have consistency and complete visibility across environments for configurations and settings to fulfill AWS EKS security best practices can be difficult. KubeArmor helps you take care of most of these for you.\nStreamlined Deployment: Updated Helm Chart Deploying KubeArmor has never been smoother. The updated Helm chart simplifies the installation process, ensuring that you can effortlessly manage KubeArmor’s security policies across your Kubernetes clusters. Spend less time configuring and more time securing. Use of KubeArmor Operator greatly simplifies the auto detection of cluster components and deploying the kubearmor accordingly. For example, no more mounting of unwanted host mount points to just detect the container runtime in use.\nStaying in Sync with Infrastructure: Terraform Updates For those who embrace infrastructure-as-code, KubeArmor v0.11 offers updated Terraform integration. Seamlessly incorporate KubeArmor into your Terraform workflows, ensuring consistent security provisioning throughout your infrastructure.\nOpen source KubeArmor terraform provider from AccuKnox helps provision KubeArmor deployments, policies, and configuration at scale using Hashicorp Terraform.\nPushing Boundaries: Scale Testing with KubeArmor-Relay Scalability is of paramount importance. One of primary hurdle to observability/monitoring solutions is its impact on runtime performance. With v0.11, we tested logging/telemetry components such as KubeArmor-Relay for scale of 100s of nodes. Through rigorous testing under varying workloads, KubeArmor v0.11 ensures unwavering performance even in the most dynamic Kubernetes environments.\nFlourishing Ecosystem: Adopters Update Our community of adopters continues to grow, and we’re immensely grateful for your support. Join a vibrant community of users and contributors who are shaping the future of container security. Together, we’re elevating Kubernetes security to new heights.\nThanks/Credits We extend our gratitude to our dedicated community, whose feedback and contributions drive the evolution of KubeArmor. Dive into the cutting-edge security enhancements of KubeArmor v0.11 and fortify your Kubernetes environment with confidence.\nTo explore the latest features and embark on your journey with KubeArmor v0.11, visit our official GitHub repository and comprehensive documentation.\nSecure your containers, fortify your Kubernetes clusters — experience KubeArmor v0.11 today.\nStay secure, The KubeArmor Team\n",
+  "wordCount" : "1287",
+  "inLanguage": "en",
+  "datePublished": "2023-08-19T00:00:00Z",
+  "dateModified": "2023-08-19T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "KubeArmor Maintainers"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://hugo.shubhamtatvamasi.com/posts/release-11/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "KubeArmor",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://hugo.shubhamtatvamasi.com/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://hugo.shubhamtatvamasi.com" accesskey="h" title="KubeArmor (Alt + H)">KubeArmor</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://hugo.shubhamtatvamasi.com/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://hugo.shubhamtatvamasi.com/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://hugo.shubhamtatvamasi.com/categories/" title="Categories">
+                    <span>Categories</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://hugo.shubhamtatvamasi.com/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://docs.kubearmor.io" title="Docs">
+                    <span>Docs</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      KubeArmor v0.11 Release
+    </h1>
+    <div class="post-description">
+      Elevating Container Security for Kubernetes Environments
+    </div>
+    <div class="post-meta"><span title='2023-08-19 00:00:00 +0000 UTC'>August 19, 2023</span>&nbsp;·&nbsp;KubeArmor Maintainers
+
+</div>
+  </header> 
+  <div class="post-content"><p>We&rsquo;re thrilled to introduce the latest release of KubeArmor, version v0.11! This significant update reinforces our commitment to providing top-tier container-level security for Kubernetes deployments. With an array of new features, integrations, and improvements, KubeArmor v0.11 empowers you to achieve even greater security and control over your containerized workloads. Let&rsquo;s delve into the key highlights of this release:</p>
+<h2 id="operator-support-simplifying-management-and-deployment">Operator support: Simplifying Management and Deployment<a hidden class="anchor" aria-hidden="true" href="#operator-support-simplifying-management-and-deployment">#</a></h2>
+<p><img loading="lazy" src="/images/release-11/operator-support.png" alt=""  />
+</p>
+<p>KubeArmor v0.11 comes with robust operator support, making the installation, configuration, and management of KubeArmor instances a breeze. The KubeArmor Operator streamlines the deployment process, enabling you to efficiently set up and maintain KubeArmor across your Kubernetes clusters. Embrace simplicity and consistency in managing your security policies.</p>
+<p>Elements of KubeArmor Operator design:</p>
+<ul>
+<li><strong>Operator</strong>: Operator is the initial component that gets deployed as part of helm based installation. The job of the operator is to reconcile the current state of KubeArmor to its intended state.</li>
+<li><strong>Snitch</strong>: Snitch is a job deployed by operator to check what is the prevalent LSM (Linux Security Modules) and the container runtime on each of the node. Snitch then directs the KubeArmor daemonset to use these parameters to accordingly use the appropriate enforcer and container runtime primitives.</li>
+<li><strong>bpf-containerd</strong>: This is essentially the KubeArmor daemonset that does most of the work from observability to policy enforcement. Note that the name of the daemonset is dependent on the underlying enforcer (bpf, apparmor) that is used and the container runtime that is detected.</li>
+<li><strong>Relay</strong>: KubeArmor Relay connects to each of the daemonset and collects the alerts/telemetry/log and makes it available at single GRPC endpoint. External services can connect to KubeArmor Relay to gets the alerts/telemetry from a single point. Relay is available as a k8s deployment/service.</li>
+<li><strong>Controller</strong>: KubeArmor controller reconciles the KubeArmor policies. One of the biggest advantage of KubeArmor is its use of k8s-native design for policy management. Users can enable disable policies at will by applying/deleting the policies at runtime. This enables a wide range of possibilities such as time-based policy activation.</li>
+</ul>
+<h2 id="opentelemetry">OpenTelemetry<a hidden class="anchor" aria-hidden="true" href="#opentelemetry">#</a></h2>
+<p><img loading="lazy" src="/images/release-11/OpenTelemetry.png" alt=""  />
+</p>
+<p>The <a href="https://github.com/kubearmor/otel-adapter">OpenTelemetry KubeArmor</a> adapter converts KubeArmor telemetry data (logs, visibilty events, policy violations) to the openTelemetry format. This <a href="https://github.com/kubearmor/KubeArmor/issues/894">adds opentelemetry support to KubeArmor</a> providing a vendor agnostic means of exporting KubeArmor&rsquo;s telemetry data to various observability backend such as <a href="https://www.elastic.co/guide/en/apm/guide/current/open-telemetry-direct.html#connect-open-telemetry-collector">elastic search</a>, <a href="https://grafana.com/docs/opentelemetry/collector/">grafana</a>, <a href="https://signoz.io/blog/opentelemetry-apm/">signoz</a> and a bunch of other <a href="https://github.com/open-telemetry/community/blob/main/ADOPTERS.md">opentelemetry adopters</a>!</p>
+<p>To enhance your observability capabilities, KubeArmor now seamlessly integrates with Open Telemetry. Gain unparalleled insights into container behavior and workload interactions through comprehensive telemetry data collection. With this integration, you&rsquo;ll be equipped to make informed decisions, swiftly identify anomalies, and proactively address potential security threats.</p>
+<p>Credits: Amazing work by <a href="https://github.com/Chinwendu20">Maureen Ononiwu</a> for handling KubeArmor&rsquo;s OpenTelemetry integration as part of LFX Mentorship. :rocket:</p>
+<h2 id="announcing-k8tls-pronounced-cattles-k8s-service-endpoints-tls-best-practices-assessment">Announcing k8tls (pronounced cattles): k8s service endpoints TLS best practices assessment<a hidden class="anchor" aria-hidden="true" href="#announcing-k8tls-pronounced-cattles-k8s-service-endpoints-tls-best-practices-assessment">#</a></h2>
+<p><img loading="lazy" src="/images/release-11/k8tls.png" alt=""  />
+</p>
+<p>Security extends beyond containers. KubeArmor v0.11 introduces <a href="https://github.com/kubearmor/k8tls">k8tls</a> to bolster transport layer security within Kubernetes clusters. Safeguard your communications with enhanced encryption, safeguarding your data and ensuring the confidentiality of sensitive information.</p>
+<p><a href="https://github.com/kubearmor/k8tls">K8tls</a> is a k8s-native service endpoint scanning engine that verifies whether the endpoint is using secure communication and is using right security configuration. K8tls deploys itself as a k8s job that scans/fingerprints k8s service endpoints to identify if TLS best practices are followed. Primary features include:</p>
+<ul>
+<li>🔒 Check if the server port is TLS enabled or not.</li>
+<li>📃 Check TLS version, Ciphersuite, Hash, and Signature for the connection. Are these TLS parameters per the TLS best practices guide?</li>
+<li>Certificate Verification
+<ul>
+<li>💥 Is the certificate expired or revoked?</li>
+<li>✍️ Is it a self-signed certificate?</li>
+<li>⛓️ Is there a self-signed certificate in the full certificate chain?</li>
+</ul>
+</li>
+</ul>
+<h2 id="kubearmor-as-canonical-microk8s-addon">KubeArmor as Canonical Microk8s Addon<a hidden class="anchor" aria-hidden="true" href="#kubearmor-as-canonical-microk8s-addon">#</a></h2>
+<p><img loading="lazy" src="/images/release-11/microk8s.png" alt=""  />
+</p>
+<p>Microk8s is a full embedded Kubernetes platform that is lightweight yet robust and scalable and is a perfect fit for edge, embedded scenarios.
+KubeArmor support for Canonical MicroK8s as <a href="https://github.com/canonical/microk8s-community-addons/pull/147">a community addon</a> is merged making microk8s more secure. Microk8s with KubeArmor brings enterprise grade security to lightweight edge kubernetes environments.</p>
+<h2 id="kind-and-minikube-compatibility">Kind and Minikube Compatibility<a hidden class="anchor" aria-hidden="true" href="#kind-and-minikube-compatibility">#</a></h2>
+<p>With this release, KubeArmor extends its compatibility to Kind and Minikube clusters, enabling you to effortlessly apply KubeArmor&rsquo;s security policies to your local testing and development environments. Maintain consistency between testing and production while fortifying your workloads.</p>
+<p><img loading="lazy" src="/images/release-11/kind.png" alt=""  />
+
+<img loading="lazy" src="/images/release-11/minikube.jpg" alt=""  />
+</p>
+<h2 id="karmor-profile">karmor profile<a hidden class="anchor" aria-hidden="true" href="#karmor-profile">#</a></h2>
+<p><code>karmor logs</code> tool provides raw telemetry out of the box. However, you may want to summarize the process, file, network, syscall events over a period of time. <code>karmor profile</code> introduces a way to handle the summarization. KubeArmor community followers might realize that the base <code>profile</code> feature was added in v0.8 release. v0.11 vastly improves the usability of the features, for e.g, by sorting the data based on process name, summarizing/aggregating well, adding syscall related event summarization etc.</p>
+<p><img loading="lazy" src="/images/release-11/kubearmor-profile.gif" alt=""  />
+</p>
+<h2 id="eks-addon-published-simplifing-eks-deployment">EKS Addon published: Simplifing EKS deployment<a hidden class="anchor" aria-hidden="true" href="#eks-addon-published-simplifing-eks-deployment">#</a></h2>
+<p><img loading="lazy" src="/images/release-11/kubearmor-eks.png" alt=""  />
+</p>
+<p>Amazon EKS Anywhere allows installing and managing Kubernetes clusters on your own infrastructure, with optional support from AWS. EKS Anywhere supports full lifecycle management of multiple Kubernetes clusters that can operate completely independently of any AWS services. It provides open-source software that’s up to date and patched so you can have an on-premises Kubernetes environment that’s more reliable than a self-managed Kubernetes offering. EKS Anywhere is compatible with Bare Metal, CloudStack, and VMware vSphere as deployment targets.</p>
+<p>Although EKS Anywhere can make cluster administration easier, the issue of protecting how Kubernetes namespaces, pods, workloads, and clusters interaction and access of shared resources remains an unsolved problem. It is imperative that workloads are protected at runtime since most of the attacks such as cryptomining, ransomware, data exfiltration, denial of service are manifest once the workloads are deployed in target k8s environment.</p>
+<p>In line with the recommended safety guidelines for EKS, KubeArmor comprehensively fulfills these requirements. Getting up to speed on the Kubernetes threat environment proves to be difficult for security teams. New responsibilities for Kubernetes infrastructure and workloads lead to high overhead. Furthermore, ensuring that platform and application teams have consistency and complete visibility across environments for configurations and settings to fulfill <a href="https://www.trendmicro.com/cloudoneconformity-staging/knowledge-base/aws/EKS/">AWS EKS security best practices</a> can be difficult. KubeArmor helps you take care of most of these for you.</p>
+<h2 id="streamlined-deployment-updated-helm-chart">Streamlined Deployment: Updated Helm Chart<a hidden class="anchor" aria-hidden="true" href="#streamlined-deployment-updated-helm-chart">#</a></h2>
+<p>Deploying KubeArmor has never been smoother. The updated Helm chart simplifies the installation process, ensuring that you can effortlessly manage KubeArmor&rsquo;s security policies across your Kubernetes clusters. Spend less time configuring and more time securing. Use of KubeArmor Operator greatly simplifies the auto detection of cluster components and deploying the kubearmor accordingly. For example, no more mounting of unwanted host mount points to just detect the container runtime in use.</p>
+<h2 id="staying-in-sync-with-infrastructure-terraform-updates">Staying in Sync with Infrastructure: Terraform Updates<a hidden class="anchor" aria-hidden="true" href="#staying-in-sync-with-infrastructure-terraform-updates">#</a></h2>
+<p>For those who embrace infrastructure-as-code, KubeArmor v0.11 offers updated Terraform integration. Seamlessly incorporate KubeArmor into your Terraform workflows, ensuring consistent security provisioning throughout your infrastructure.</p>
+<p>Open source <a href="https://github.com/accuknox/terraform-provider-accuknox#example---kubearmor-resources">KubeArmor terraform provider from AccuKnox</a> helps provision KubeArmor deployments, policies, and configuration at scale using Hashicorp Terraform.</p>
+<h2 id="pushing-boundaries-scale-testing-with-kubearmor-relay">Pushing Boundaries: Scale Testing with KubeArmor-Relay<a hidden class="anchor" aria-hidden="true" href="#pushing-boundaries-scale-testing-with-kubearmor-relay">#</a></h2>
+<p>Scalability is of paramount importance. One of primary hurdle to observability/monitoring solutions is its impact on runtime performance. With v0.11, we tested logging/telemetry components such as KubeArmor-Relay for scale of 100s of nodes. Through rigorous testing under varying workloads, KubeArmor v0.11 ensures unwavering performance even in the most dynamic Kubernetes environments.</p>
+<h2 id="flourishing-ecosystem-adopters-update">Flourishing Ecosystem: Adopters Update<a hidden class="anchor" aria-hidden="true" href="#flourishing-ecosystem-adopters-update">#</a></h2>
+<p>Our <a href="https://github.com/kubearmor/KubeArmor/blob/main/ADOPTERS.md">community of adopters</a> continues to grow, and we&rsquo;re immensely grateful for your support. Join a vibrant community of users and contributors who are shaping the future of container security. Together, we&rsquo;re elevating Kubernetes security to new heights.</p>
+<h2 id="thankscredits">Thanks/Credits<a hidden class="anchor" aria-hidden="true" href="#thankscredits">#</a></h2>
+<p>We extend our gratitude to our dedicated community, whose feedback and contributions drive the evolution of KubeArmor. Dive into the cutting-edge security enhancements of KubeArmor v0.11 and fortify your Kubernetes environment with confidence.</p>
+<p>To explore the latest features and embark on your journey with KubeArmor v0.11, visit our <a href="https://github.com/kubearmor/kubearmor">official GitHub repository</a> and <a href="https://docs.kubearmor.io/kubearmor/">comprehensive documentation</a>.</p>
+<p>Secure your containers, fortify your Kubernetes clusters — experience KubeArmor v0.11 today.</p>
+<p>Stay secure,
+The KubeArmor Team</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://hugo.shubhamtatvamasi.com/tags/kubearmor/">kubearmor</a></li>
+      <li><a href="https://hugo.shubhamtatvamasi.com/tags/kubernetes/">kubernetes</a></li>
+      <li><a href="https://hugo.shubhamtatvamasi.com/tags/security/">security</a></li>
+      <li><a href="https://hugo.shubhamtatvamasi.com/tags/ebpf/">ebpf</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://hugo.shubhamtatvamasi.com">KubeArmor</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
