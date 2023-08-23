@@ -6,6 +6,7 @@ hugo new site hugo-demo --format yaml
 cd hugo-demo
 ```
 
+Initialize git repository:
 ```bash
 git init
 git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
@@ -33,6 +34,6 @@ hugo
 Remove git submodule:
 ```bash
 git rm --cached themes/PaperMod
+git rm .gitmodules
+rm -rf themes/PaperMod
 ```
-
-

@@ -1,3 +1,45 @@
-baseURL: http://example.org/
+baseURL: localhost:1313
 languageCode: en-us
-title: My New Hugo Site
+title: KubeArmor
+theme: PaperMod
+
+params:
+  homeInfoParams:
+    Title: "Runtime protection for Kubernetes & other cloud Workloads"
+    Content: |
+      KubeArmor uses eBPF and Linux Security Modules (LSM) to provide policy based system
+      to restrict any unwanted, malicious behavior of cloud-native workloads at runtime.
+  socialIcons:
+    - name: twitter
+      url: "https://twitter.com/KubeArmor"
+    - name: github
+      url: "https://github.com/kubearmor/KubeArmor"
+    - name: linkedin
+      url: "https://www.linkedin.com/company/kubearmor/"
+
+menu:
+  main:
+    - identifier: archives
+      name: Archives
+      url: /archives/
+      weight: 10
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 20
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 30
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 40
+    - name: Docs
+      url: https://docs.kubearmor.io
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
