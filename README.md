@@ -37,3 +37,9 @@ git rm --cached themes/PaperMod
 git rm .gitmodules
 rm -rf themes/PaperMod
 ```
+
+Pull submodule:
+```bash
+git pull
+git submodule update --init --recursive
+```
